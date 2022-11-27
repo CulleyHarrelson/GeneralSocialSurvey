@@ -1,7 +1,7 @@
 import numpy as np
 
 def columns():
-    
+
     return [
     'year',
     'id',
@@ -16,6 +16,9 @@ def columns():
     'degree',
     'sex',
     'race',
+    'racecen1',
+    'racecen2',
+    'racecen3',
     'res16',
     'reg16',
     'adults',
@@ -510,5 +513,7 @@ def gss_replace_invalid(df):
 
     df.income.replace([0, 13, 98, 99], NA, inplace=True)
     df.rincome.replace([0, 13, 98, 99], NA, inplace=True)
-    #df.zodiac.replace(['I'], NA, inplace=True)
-    
+
+    # check that we've cleaned all columns that need it;
+    # all columns we've added NaN to should be floats
+
