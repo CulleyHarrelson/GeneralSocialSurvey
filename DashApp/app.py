@@ -1,35 +1,15 @@
-# Run this app with `python app.py` and
-# visit http://127.0.0.1:8050/ in your web browser.
-
-from dash import Dash, html, dcc
-import plotly.express as px
-import pandas as pd
-
-app = Dash(__name__)
-
-# assume you have a "long-form" data frame
-# see https://plotly.com/python/px-arguments/ for more options
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
-
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
-
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
-
-    html.Div(children='''
-        Dash: A web application framework for your data.
-    '''),
-
-    dcc.Graph(
-        id='example-graph',
-        figure=fig
-    )
-])
+from util import Factory
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0',debug=True, port=8051)
+    app = Factory.CustomDash()
+    dashboard_1 = Factory.Dashboard()
+    dashboard_1.add_figure_from_data_frame()  # When it's empty, add Dummy Data
+    dashboard_1.add_figure_from_data_frame(figure_id="another_example")
+    dashboard_1.add_figure_from_data_frame({
+        "Category": ["Shelf", "Table", "Chair", "Shelf", "Table", "Chair"],  # First element is presumed to be x-axis
+        "Amount": [4, 1, 2, 2, 4, 5],  # Second element be y-axis
+        "City": ["CA", "CA", "CA", "NJ", "NJ", "NJ"]
+    }, figure_id="data_frame_example")
 
+    app.add_dashboard(dashboard_1)
+    app.run_custom_server()
